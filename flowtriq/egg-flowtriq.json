@@ -1,0 +1,73 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-08-04T19:00:00+00:00",
+    "name": "Flowtriq Agent",
+    "author": "jacob@traztech.ca",
+    "uuid": "210550da-2475-4238-832b-c27840da2c11",
+    "description": "Real-time network traffic monitoring and DDoS detection agent. Monitors traffic volume, detects attacks, and reports to your Flowtriq dashboard.",
+    "tags": [],
+    "features": [],
+    "docker_images": {
+        "ghcr.io/parkervcp/yolks:python_3.12": "ghcr.io/parkervcp/yolks:python_3.12"
+    },
+    "file_denylist": [],
+    "startup": "PYTHONPATH=/home/container /usr/local/bin/python -m ftagent --config /home/container/config.json",
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"Entering main monitoring loop\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\ncd /mnt/server\npip install --target /mnt/server ftagent\ncat > /mnt/server/config.json << ENDCFG\n{\"api_key\": \"${FTAGENT_API_KEY}\", \"node_uuid\": \"${FTAGENT_NODE_UUID}\", \"api_base\": \"${FTAGENT_API_BASE}\", \"pcap_enabled\": false}\nENDCFG\necho \"Installation complete\"",
+            "container": "ghcr.io/parkervcp/yolks:python_3.12",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "API Key",
+            "description": "Your Flowtriq API key. Found in your dashboard under Settings.",
+            "env_variable": "FTAGENT_API_KEY",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string"
+            ],
+            "sort": 1
+        },
+        {
+            "name": "Node UUID",
+            "description": "The UUID for this node. Create a node in your Flowtriq dashboard to get one.",
+            "env_variable": "FTAGENT_NODE_UUID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string"
+            ],
+            "sort": 2
+        },
+        {
+            "name": "API Base URL",
+            "description": "Flowtriq API endpoint. Only change this if you are running a self-hosted instance.",
+            "env_variable": "FTAGENT_API_BASE",
+            "default_value": "https://flowtriq.com/api/v1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string"
+            ],
+            "sort": 3
+        }
+    ]
+}
