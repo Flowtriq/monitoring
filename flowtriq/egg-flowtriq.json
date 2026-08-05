@@ -15,16 +15,16 @@
         "ghcr.io/parkervcp/yolks:python_3.12": "ghcr.io/parkervcp/yolks:python_3.12"
     },
     "file_denylist": [],
-    "startup": "echo '{\"api_key\":\"{{FTAGENT_API_KEY}}\",\"node_uuid\":\"{{FTAGENT_NODE_UUID}}\",\"api_base\":\"{{FTAGENT_API_BASE}}\",\"pcap_enabled\":false,\"flow_enabled\":true,\"flow_protocol\":\"{{FTAGENT_FLOW_PROTOCOL}}\",\"flow_port\":{{SERVER_PORT}},\"flow_bind\":\"0.0.0.0\"}' > /home/container/config.json && PYTHONPATH=/home/container /usr/local/bin/python -m ftagent --config /home/container/config.json",
+    "startup": "PYTHONPATH=/home/container /usr/local/bin/python -m ftagent --config /home/container/config.json",
     "config": {
-        "files": "{}",
+        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"api_key\": \"{{server.build.env.FTAGENT_API_KEY}}\",\r\n            \"node_uuid\": \"{{server.build.env.FTAGENT_NODE_UUID}}\",\r\n            \"api_base\": \"{{server.build.env.FTAGENT_API_BASE}}\",\r\n            \"flow_protocol\": \"{{server.build.env.FTAGENT_FLOW_PROTOCOL}}\",\r\n            \"flow_port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\n    \"done\": \"Entering main monitoring loop\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/bash\ncd /mnt/server\npip install --target /mnt/server ftagent\necho \"Installation complete\"",
+            "script": "#!/bin/bash\ncd /mnt/server\npip install --target /mnt/server ftagent\ncat > /mnt/server/config.json <<'EOF'\n{\"api_key\":\"\",\"node_uuid\":\"\",\"api_base\":\"https://flowtriq.com/api/v1\",\"pcap_enabled\":false,\"flow_enabled\":true,\"flow_protocol\":\"auto\",\"flow_port\":2055,\"flow_bind\":\"0.0.0.0\"}\nEOF\necho \"Installation complete\"",
             "container": "ghcr.io/parkervcp/yolks:python_3.12",
             "entrypoint": "bash"
         }
