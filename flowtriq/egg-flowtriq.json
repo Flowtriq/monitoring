@@ -15,7 +15,7 @@
         "ghcr.io/parkervcp/yolks:python_3.12": "ghcr.io/parkervcp/yolks:python_3.12"
     },
     "file_denylist": [],
-    "startup": "PYTHONPATH=/home/container /usr/local/bin/python -m ftagent --config /home/container/config.json",
+    "startup": "cd /home/container && python -m ftagent --config /home/container/config.json",
     "config": {
         "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"api_key\": \"{{server.build.env.FTAGENT_API_KEY}}\",\r\n            \"node_uuid\": \"{{server.build.env.FTAGENT_NODE_UUID}}\",\r\n            \"api_base\": \"{{server.build.env.FTAGENT_API_BASE}}\",\r\n            \"flow_protocol\": \"{{server.build.env.FTAGENT_FLOW_PROTOCOL}}\",\r\n            \"flow_port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\n    \"done\": \"Entering main monitoring loop\"\n}",
